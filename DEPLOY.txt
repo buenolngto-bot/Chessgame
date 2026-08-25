@@ -1,0 +1,87 @@
+========================================
+  CHESS APP - ORACLE CLOUD DEPLOYMENT
+========================================
+
+1. ORACLE CLOUD ACCOUNT
+------------------------
+- Go to https://cloud.oracle.com
+- Sign up for a free account (credit card required for verification, will NOT be charged)
+
+2. CREATE A FREE ARM VM
+------------------------
+- Go to Compute > Instances > Create Instance
+- Image:    Ubuntu 22.04 or 24.04 (aarch64/ARM)
+- Shape:    VM.Standard.A1.Flex (Always Free eligible)
+- OCPU:     4
+- RAM:      24 GB
+- Upload or generate an SSH key pair
+- Click Create and note the PUBLIC IP address
+
+3. SSH INTO YOUR VM
+-------------------
+  ssh -i <your-key-file> ubuntu@<PUBLIC_IP>
+
+4. INSTALL DEPENDENCIES
+-----------------------
+  sudo apt update && sudo apt upgrade -y
+  sudo apt install -y nodejs npm git
+  sudo npm install -g pm2
+
+5. CLONE YOUR REPO
+-------------------
+  git clone <your-github-repo-url> ~/chess
+  cd ~/chess
+  npm install
+
+6. START THE APP WITH PM2
+--------------------------
+  pm2 start server/index.js --name chess
+  pm2 startup
+  pm2 save
+
+  (pm2 keeps the app running even after server restarts)
+
+7. OPEN PORT 3000 IN FIREWALL
+------------------------------
+  Oracle Cloud Dashboard:
+  - Go to Networking > Virtual Cloud Networks > your VCN
+  - Click Security Lists
+  - Add Ingress Rule:
+      Source CIDR:  0.0.0.0/0
+      Destination Port: 3000
+  - Click Add
+
+8. ACCESS YOUR APP
+------------------
+  Open in browser:
+  http://<PUBLIC_IP>:3000
+
+========================================
+  USEFUL COMMANDS
+========================================
+
+  Check app status:     pm2 status
+  View logs:            pm2 logs chess
+  Restart app:          pm2 restart chess
+  Stop app:             pm2 stop chess
+
+========================================
+  OPTIONAL: CUSTOM DOMAIN + HTTPS
+========================================
+
+  1. Point a domain to your VM's public IP
+  2. Install nginx:
+       sudo apt install -y nginx
+  3. Configure nginx as reverse proxy on port 80
+  4. Install Certbot for free SSL:
+       sudo apt install -y certbot python3-certbot-nginx
+       sudo certbot --nginx -d yourdomain.com
+
+========================================
+  NOTES
+========================================
+
+  - This is ALWAYS FREE on Oracle Cloud
+  - Your app stays running 24/7
+  - User data (data/users.json) persists on the VM disk
+  - No credit card charges for the Always Free tier
