@@ -1,0 +1,19 @@
+{
+  "necrobytes": {
+    "name": "necrobytes",
+    "passwordHash": "a3dcf394d24a0eaa18df937c0d4b2921df706104e0220713babde6ffa81bdc9d",
+    "avatar": "♙",
+    "rank": "Bronze",
+    "points": 0,
+    "region": "EU",
+    "stats": {
+      "wins": 0,
+      "losses": 0,
+      "draws": 0
+    },
+    "gamesPlayed": 0,
+    "createdAt": 1787652098503,
+    "token": "00c70bd0-fdef-4501-aa35-a7960e82de82",
+    "pid": "85e83a01-59e8-4b8d-baaf-2ed47776943b"
+  }
+}

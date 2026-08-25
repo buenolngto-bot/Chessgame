@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+<title>Gambit Hall — Board Games Online</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#9822;</text></svg>" />
+<link rel="stylesheet" href="/style.css" />
+</head>
+<body data-theme="green">
+
+<!-- ======================= AUTH SCREEN ======================= -->
+<div id="authScreen">
+  <div class="lobby-card">
+    <div class="brand-big"><span class="knight-glyph">&#x265E;</span> Gambit Hall</div>
+    <p class="tagline">Board games online — Chess, Checkers, Othello, Connect Four, Go, Xiangqi, Dama</p>
+
+    <div id="loginForm">
+      <label class="field-label" for="loginUser">Username</label>
+      <input id="loginUser" maxlength="16" placeholder="Username" autocomplete="username" />
+      <label class="field-label" for="loginPass">Password</label>
+      <input id="loginPass" type="password" maxlength="32" placeholder="Password" autocomplete="current-password" />
+      <button id="loginBtn" class="btn primary big">Log In</button>
+      <p id="authStatus" class="landing-status"></p>
+      <div class="divider">or</div>
+      <button id="showRegisterBtn" class="btn big">Create Account</button>
+    </div>
+
+    <div id="registerForm" hidden>
+      <label class="field-label" for="regUser">Username</label>
+      <input id="regUser" maxlength="16" placeholder="Username" autocomplete="username" />
+      <label class="field-label" for="regPass">Password</label>
+      <input id="regPass" type="password" maxlength="32" placeholder="Password (3+ chars)" autocomplete="new-password" />
+      <button id="registerBtn" class="btn primary big">Create Account</button>
+      <p id="regStatus" class="landing-status"></p>
+      <div class="divider">or</div>
+      <button id="showLoginBtn" class="btn big">Back to Login</button>
+    </div>
+
+    <div id="guestRow">
+      <button id="playGuestBtn" class="btn ghost big" style="margin-top:16px;">Play as Guest</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= LOBBY ======================= -->
+<div id="landing" hidden>
+  <div class="lobby-card wide">
+    <div class="lobby-header">
+      <div class="brand-big"><span class="knight-glyph">&#x265E;</span> Gambit Hall</div>
+      <div id="userBadge" class="user-badge" hidden>
+        <span id="userAvatar" class="badge-avatar"></span>
+        <span id="userName" class="badge-name"></span>
+        <span id="userRank" class="badge-rank"></span>
+        <span id="userPoints" class="badge-pts"></span>
+        <button id="logoutBtn" class="icon-btn small" title="Log out">&#x2715;</button>
+      </div>
+    </div>
+
+    <p class="tagline">Choose a game and play online, locally, or vs computer.</p>
+
+    <!-- Game selector -->
+    <label class="field-label">Game</label>
+    <div id="gameGrid" class="game-grid">
+      <button class="game-tile active" data-game="chess">
+        <span class="gt-icon">&#x265E;</span>
+        <span class="gt-name">Chess</span>
+      </button>
+      <button class="game-tile" data-game="checkers">
+        <span class="gt-icon">&#x25C6;</span>
+        <span class="gt-name">Checkers</span>
+      </button>
+      <button class="game-tile" data-game="othello">
+        <span class="gt-icon">&#x25CF;</span>
+        <span class="gt-name">Othello</span>
+      </button>
+      <button class="game-tile" data-game="connect4">
+        <span class="gt-icon">&#x2B24;</span>
+        <span class="gt-name">Connect 4</span>
+      </button>
+      <button class="game-tile" data-game="xiangqi">
+        <span class="gt-icon">&#x5C07;</span>
+        <span class="gt-name">Xiangqi</span>
+      </button>
+      <button class="game-tile" data-game="go">
+        <span class="gt-icon">&#x25CE;</span>
+        <span class="gt-name">Go</span>
+      </button>
+      <button class="game-tile" data-game="dama">
+        <span class="gt-icon">&#x2662;</span>
+        <span class="gt-name">Dama</span>
+      </button>
+    </div>
+
+    <label class="field-label" for="nameInput">Your name</label>
+    <input id="nameInput" maxlength="16" placeholder="Player" autocomplete="off" />
+
+    <label class="field-label" for="tcSelect">Time control</label>
+    <select id="tcSelect">
+      <option value="1+0">Bullet · 1 min</option>
+      <option value="3+2">Blitz · 3 | 2</option>
+      <option value="5+0" selected>Blitz · 5 min</option>
+      <option value="10+0">Rapid · 10 min</option>
+      <option value="15+10">Classical · 15 | 10</option>
+      <option value="unlimited">Unlimited</option>
+    </select>
+
+    <button id="quickBtn" class="btn primary big">Quick Match</button>
+    <button id="createBtn" class="btn big">Create Private Room</button>
+
+    <div class="divider">or play locally</div>
+    <button id="localBtn" class="btn big">Local Game (2 Players)</button>
+    <div class="ai-row">
+      <button id="aiBtn" class="btn big">vs Computer</button>
+      <select id="aiDiffSel">
+        <option value="1">Easy</option>
+        <option value="2" selected>Medium</option>
+        <option value="3">Hard</option>
+      </select>
+    </div>
+
+    <div class="divider">or join with a code</div>
+    <div class="join-row">
+      <input id="codeInput" maxlength="4" placeholder="CODE" autocomplete="off" spellcheck="false" />
+      <button id="joinBtn" class="btn">Join</button>
+    </div>
+
+    <p id="landingStatus" class="landing-status"></p>
+  </div>
+</div>
+
+<!-- ======================= GAME ======================= -->
+<div id="game" hidden>
+  <header id="topbar">
+    <div class="brand"><span class="knight-glyph">&#x265E;</span> <span class="brand-name">Gambit Hall</span></div>
+
+    <button id="roomChip" class="chip mono" title="Copy invite link">---- <span class="copy-ic">&#x2398;</span></button>
+
+    <div class="top-actions">
+      <button id="flipBtn" class="icon-btn" title="Flip board">&#x21C5;</button>
+      <button id="soundBtn" class="icon-btn" title="Toggle sound">&#x1F50A;</button>
+      <button id="settingsBtn" class="icon-btn" title="Settings">&#x2699;</button>
+      <button id="exitBtn" class="icon-btn danger" title="Leave room">&#x2715;</button>
+    </div>
+  </header>
+
+  <main id="layout">
+    <!-- board column -->
+    <section id="boardCol">
+      <div class="player-bar top" id="barTop">
+        <div class="avatar" id="avatarTop"></div>
+        <div class="pb-mid">
+          <div class="pb-name-row"><span class="pb-name" id="nameTop">—</span><span class="pb-rating-tag" id="colorTagTop"></span></div>
+          <div class="captured" id="capturedTop"></div>
+        </div>
+        <div class="clock" id="clockTop">--:--</div>
+      </div>
+
+      <div id="boardWrap">
+        <div id="board"></div>
+        <div id="boardOverlay" hidden>
+          <div class="overlay-card">
+            <div id="overlayTitle">Waiting for opponent…</div>
+            <div id="overlaySub"></div>
+            <div id="overlayActions"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="player-bar bottom" id="barBottom">
+        <div class="avatar" id="avatarBottom"></div>
+        <div class="pb-mid">
+          <div class="pb-name-row"><span class="pb-name" id="nameBottom">—</span><span class="pb-rating-tag" id="colorTagBottom"></span></div>
+          <div class="captured" id="capturedBottom"></div>
+        </div>
+        <div class="clock" id="clockBottom">--:--</div>
+      </div>
+    </section>
+
+    <!-- sidebar -->
+    <aside id="sidebar">
+      <div id="statusBar">
+        <span id="statusText">—</span>
+        <span id="drawActions" hidden>
+          <button id="drawAccept" class="btn tiny accept">Accept</button>
+          <button id="drawDecline" class="btn tiny decline">Decline</button>
+        </span>
+      </div>
+
+      <nav id="histNav">
+        <button id="navStart" class="icon-btn small" title="First move">&#x23EE;</button>
+        <button id="navPrev" class="icon-btn small" title="Previous move">&#x25C0;</button>
+        <button id="navNext" class="icon-btn small" title="Next move">&#x25B6;</button>
+        <button id="navLive" class="icon-btn small live" title="Back to live">&#x23ED;</button>
+        <span id="viewTag"></span>
+      </nav>
+
+      <div id="moveList" class="scroll"></div>
+
+      <div id="actionRow">
+        <button id="resignBtn" class="btn small danger">Resign</button>
+        <button id="offerDrawBtn" class="btn small">Draw</button>
+        <button id="passBtn" class="btn small" hidden>Pass</button>
+        <button id="rematchBtn" class="btn small" disabled>Rematch</button>
+        <button id="exportPgnBtn" class="btn small ghost">PGN</button>
+        <button id="copyFenBtn" class="btn small ghost">FEN</button>
+      </div>
+
+      <div id="chatBox">
+        <div id="chatHead">Chat <span id="spectatorTag"></span></div>
+        <div id="msgs" class="scroll"></div>
+        <form id="chatForm" autocomplete="off">
+          <input id="chatInput" maxlength="300" placeholder="Say something…" />
+          <button class="btn small" type="submit">Send</button>
+        </form>
+      </div>
+    </aside>
+  </main>
+
+  <!-- settings popover -->
+  <div id="settingsPop" hidden>
+    <h3>Board theme</h3>
+    <div id="themeRow">
+      <button class="theme-dot" data-theme-set="green" title="Classic green"></button>
+      <button class="theme-dot" data-theme-set="walnut" title="Walnut"></button>
+      <button class="theme-dot" data-theme-set="ocean" title="Ocean"></button>
+      <button class="theme-dot" data-theme-set="night" title="Night"></button>
+    </div>
+    <h3>Pieces</h3>
+    <select id="pieceStyleSel">
+      <option value="classic">Classic (filled)</option>
+      <option value="outline">Outline</option>
+    </select>
+    <label class="check"><input type="checkbox" id="soundCheck" checked /> Sound effects</label>
+    <label class="check"><input type="checkbox" id="coordsCheck" checked /> Show coordinates</label>
+    <label class="check"><input type="checkbox" id="legalCheck" checked /> Highlight legal moves</label>
+    <label class="check"><input type="checkbox" id="autoQueenCheck" /> Auto-promote to queen</label>
+  </div>
+</div>
+
+<!-- promotion picker -->
+<div id="promoModal" class="modal" hidden>
+  <div class="modal-card promo-card">
+    <h3>Promote to...</h3>
+    <div id="promoChoices"></div>
+  </div>
+</div>
+
+<!-- generic modal -->
+<div id="modal" class="modal" hidden>
+  <div class="modal-card">
+    <h3 id="modalTitle">—</h3>
+    <p id="modalBody">—</p>
+    <div id="modalActions"></div>
+  </div>
+</div>
+
+<div id="toasts"></div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

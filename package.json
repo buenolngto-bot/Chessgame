@@ -1,0 +1,22 @@
+{
+  "name": "chess-online",
+  "version": "1.0.0",
+  "description": "Online multiplayer chess with rooms, clocks, chat and more",
+  "main": "server/index.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node server/index.js",
+    "test": "node tests/smoke.js"
+  },
+  "engines": {
+    "node": ">=16"
+  },
+  "dependencies": {
+    "chess.js": "^1.0.0-beta.8",
+    "express": "^4.19.2",
+    "socket.io": "^4.7.5"
+  },
+  "devDependencies": {
+    "socket.io-client": "^4.7.5"
+  }
+}
